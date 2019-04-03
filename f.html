@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="no">
+	<head>
+		<meta charset="UTF-8">
+		<title>Superchat - send melding via skjema</title>
+	</head>
+	<body>
+		
+		<h1>Superchat - send melding via skjema og vis innhald</h1>
+		
+		<form id="skjema"> 
+			<input type="text" id="inpAvsender" required placeholder="Kven er du?"> 
+			<input type="text" id="inpMelding" required placeholder="Kva seier du?"> 
+			<button type="submit" class="button">Send</button> 
+		</form> 
+
+		<article id="txtMeldinger"></article> 
+
+		<script src="https://www.gstatic.com/firebasejs/5.8.2/firebase.js"></script>
+		<script>
+		  // Initialize Firebase
+		  var config = {
+			apiKey: "AIzaSyAj9Kj1mpZWzYC1jr8VvWtG0c7Kw2AcriQ",
+			authDomain: "danutasittprosjekt.firebaseapp.com",
+			databaseURL: "https://danutasittprosjekt.firebaseio.com",
+			projectId: "danutasittprosjekt",
+			storageBucket: "danutasittprosjekt.appspot.com",
+			messagingSenderId: "882270098550"
+		  };
+		  firebase.initializeApp(config);
+		</script>
+		
+		<script> 
+			// opprette entitet "meldinger" og kopling til skjema-element
+			let database = firebase.database(); 
+			let meldinger = database.ref("meldinger"); 
+			let skjema = document.getElementById("skjema"); 
+			let inpAvsender = document.getElementById("inpAvsender"); 
+			let inpMelding = document.getElementById("inpMelding"); 
+			let txtMeldinger = document.getElementById("txtMeldinger"); 
+						
+			// legg opp til at innhaldet frå databasen blir vist i eit "article"-element
+			function visMelding(snapshot) 
+			{ 
+				let melding = snapshot.val(); 
+				txtMeldinger.innerHTML += `<p>${melding.avsender} seier ${melding.tekst}</p>`; 
+				txtMeldinger.innerHTML = txtMeldinger.innerHTML + meldingTekst;
+			} 
+			meldinger.on("child_added", visMelding); // kvar ny melding blir lagt til i visninga
+			
+			function regNyMelding(evt) 
+			{ 
+				evt.preventDefault();
+				var nyMelding = 
+				{ 
+					avsender: inpAvsender.value,
+					tekst: inpMelding.value
+				} 
+				meldinger.push(nyMelding); 
+				inpMelding.value = " "; 
+			} 			
+			skjema.onsubmit = regNyMelding; 
+			
+		</script>
+		
+	</body>	
+</html>
