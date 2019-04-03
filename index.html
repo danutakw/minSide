@@ -43,7 +43,7 @@
 			function visMelding(snapshot) 
 			{ 
 				let melding = snapshot.val(); 
-				txtMeldinger.innerHTML += `<p>${melding.avsender} seier ${melding.tekst}</p>`; 
+				let meldingTekst = `<p>${melding.avsender} seier ${melding.tekst}</p>`; 
 				txtMeldinger.innerHTML = meldingTekst + txtMeldinger.innerHTML;
 			} 
 			meldinger.on("child_added", visMelding); // kvar ny melding blir lagt til i visninga
